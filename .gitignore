@@ -5,7 +5,6 @@ data/processed
 data/raw
 data/tests/error
 data/tests/others
-data/tests/parsed
 data/tests/processed
 src/main/java/com/wardvision/features/smokes_outcome
 src/main/java/com/wardvision/features/watcher_activations

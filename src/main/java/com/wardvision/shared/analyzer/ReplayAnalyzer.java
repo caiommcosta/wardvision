@@ -6,9 +6,11 @@ import java.util.List;
 import com.wardvision.shared.entities.MatchContext;
 import com.wardvision.shared.gametimes.processor.GameTimesProcessor;
 import com.wardvision.shared.intercace.IEvent;
+import com.wardvision.shared.intercace.IProcessorWithResult;
 import com.wardvision.shared.intercace.IReplayAnalyzer;
 import com.wardvision.shared.intercace.ISimpleRunnerFactory;
 import com.wardvision.shared.match_details.processor.MatchDetailsProcessor;
+import com.wardvision.features.smoke_path.processor.SmokePathTracker;
 import com.wardvision.helpers.ReplayFileHelper;
 
 import skadistats.clarity.processor.runner.SimpleRunner;
@@ -44,28 +46,34 @@ public class ReplayAnalyzer implements IReplayAnalyzer {
 
       // Global processors
       GameTimesProcessor gameTimeProcessor = new GameTimesProcessor();
-      MatchDetailsProcessor teamPlayersProcessor = new MatchDetailsProcessor();
+      MatchDetailsProcessor matchDetailsProcessor = new MatchDetailsProcessor();
 
+      // Dados gerais 'comuns' para toda análise
       MatchContext context = new MatchContext(
           matchId,
           timestamp,
           gameTimeProcessor.getGameTime(),
-          teamPlayersProcessor.getMatchPlayers(),
-          teamPlayersProcessor.getHeroToPlayer(),
-          teamPlayersProcessor.getTeamNames());
+          matchDetailsProcessor.getMatchPlayers(),
+          matchDetailsProcessor.getHeroToPlayer(),
+          matchDetailsProcessor.getTeamNames());
 
       // Feature processors
-      BuybackLogProcessor buybackLogProcessor = new BuybackLogProcessor(context);
+      List<IProcessorWithResult<?>> processors = List.of(
+          new SmokePathTracker(context)
+      // adicionar outros processors
+      );
 
       SimpleRunner runner = runnerFactory.create(replayFile);
-      runner.runWith(gameTimeProcessor, teamPlayersProcessor,
-          buybackLogProcessor);
+      runner.runWith(gameTimeProcessor,
+          matchDetailsProcessor,
+          processors.toArray());
 
-      dispatch(null);
-
-      for (IEvent<?> eventController : eventControllers) {
-        eventController.finish();
+      for (IProcessorWithResult<?> processor : processors) {
+        dispatch(processor.getResult());
       }
+
+      finishAll();
+
     } catch (
 
     Exception e) {
@@ -84,5 +92,9 @@ public class ReplayAnalyzer implements IReplayAnalyzer {
         ((IEvent<T>) controller).handle(events);
       }
     }
+  }
+
+  public void finishAll() {
+    eventControllers.forEach(IEvent::finish);
   }
 }

@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wardvision.features.smoke_path.controller.SmokePathController;
-import com.wardvision.features.watcher_activations.controller.WatcherActivationController;
 import com.wardvision.shared.analyzer.ReplayAnalyzer;
 
 public class Run {

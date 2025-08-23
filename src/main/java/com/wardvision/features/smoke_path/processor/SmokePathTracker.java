@@ -161,15 +161,31 @@ public class SmokePathTracker implements IProcessorWithResult<SmokePathPoint> {
       Entity hero = ent.getByIndex(id);
       if (hero == null || !hero.getDtClass().getDtName().startsWith("CDOTA_Unit_Hero_"))
         continue;
+
+      int team = hero.getProperty("m_iTeamNum");
+      Integer smokeCounter = null;
+      String teamName = "";
+      Integer teamId = null;
+
+      if (team == RADIANT_TEAM_ID) {
+        smokeCounter = radiantSmokeCounter;
+        teamName = teamNames.getRadiant();
+        teamId = RADIANT_TEAM_ID;
+      } else if (team == DIRE_TEAM_ID) {
+        smokeCounter = direSmokeCounter;
+        teamName = teamNames.getDire();
+        teamId = DIRE_TEAM_ID;
+      }
+
       SmokePathPoint entry = new SmokePathPoint(
-          radiantSmokeCounter,
+          smokeCounter,
           timestamp,
           gameTimes.getActuallyTick(),
           matchId,
           matchPlayers.get(id).steamId(),
           matchPlayers.get(id).heroName(),
-          teamNames.radiant(),
-          RADIANT_TEAM_ID,
+          teamName,
+          teamId,
           hero.getProperty("CBodyComponent.m_cellX"),
           hero.getProperty("CBodyComponent.m_cellY"),
           gameTimes.getElapsedSeconds());

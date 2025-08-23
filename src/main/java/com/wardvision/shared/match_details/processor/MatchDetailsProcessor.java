@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.wardvision.helpers.EntityPropertyHelper;
 import com.wardvision.helpers.NameNormalizer;
 import com.wardvision.shared.match_details.entities.MatchPlayers;
@@ -17,6 +20,8 @@ import skadistats.clarity.processor.runner.Context;
 
 public class MatchDetailsProcessor {
 
+  private static final Logger log = LoggerFactory.getLogger(MatchDetailsProcessor.class);
+
   private final Map<Integer, MatchPlayers> matchPlayers = new HashMap<>();
 
   // map com key invertida para buscar um herói em O(1) em matchPlayers
@@ -26,8 +31,8 @@ public class MatchDetailsProcessor {
   private boolean meepoHasTeam = false;
   private int meepoTeam;
 
-  private String radiantName, direName;
   private final int RADIANT_TEAM_ID = 2, DIRE_TEAM_ID = 3;
+  private final MatchTeams teamNames = new MatchTeams();
 
   public MatchDetailsProcessor() {
 
@@ -42,7 +47,7 @@ public class MatchDetailsProcessor {
   }
 
   public MatchTeams getTeamNames() {
-    return new MatchTeams(radiantName, direName);
+    return teamNames;
   }
 
   @OnEntityCreated
@@ -102,15 +107,16 @@ public class MatchDetailsProcessor {
 
     Entities entities = ctx.getProcessor(Entities.class);
 
-    if (radiantName == null || direName == null) {
+    if (teamNames.getRadiant() == null || teamNames.getDire() == null) {
+
       Iterator<Entity> teams = entities.getAllByDtName("CDOTATeam");
       while (teams.hasNext()) {
         Entity team = teams.next();
         if (RADIANT_TEAM_ID == (int) team.getProperty("m_iTeamNum")) {
-          radiantName = EntityPropertyHelper.safeGetProperty(team, "m_szTeamname");
+          teamNames.setRadiant(EntityPropertyHelper.safeGetProperty(team, "m_szTeamname"));
         }
         if (DIRE_TEAM_ID == (int) team.getProperty("m_iTeamNum")) {
-          direName = EntityPropertyHelper.safeGetProperty(team, "m_szTeamname");
+          teamNames.setDire(EntityPropertyHelper.safeGetProperty(team, "m_szTeamname"));
         }
       }
     }

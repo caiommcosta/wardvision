@@ -32,7 +32,7 @@ public class SmokePathController implements IEvent<SmokePathPoint> {
     }
 
     try {
-      new DbSmokePathRepository().save(entries);
+      //new DbSmokePathRepository().save(entries);
       new CsvSmokePathRepository().save(entries);
     } catch (Exception e) {
 
