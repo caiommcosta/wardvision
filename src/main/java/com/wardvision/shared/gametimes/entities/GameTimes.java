@@ -1,4 +1,4 @@
-package com.wardvision.shared.gametimes.models;
+package com.wardvision.shared.gametimes.entities;
 
 import com.wardvision.helpers.EntityPropertyHelper;
 

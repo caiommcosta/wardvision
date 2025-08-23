@@ -1,13 +1,13 @@
 # 🧠 WardVision
 
 **WardVision** é um projeto pessoal focado na **análise de partidas profissionais de Dota 2** e na **extração de estatísticas relevantes** a partir de arquivos de replay `.dem` e de **APIs públicas**, como a OpenDota.
-
 ---
 
 ## 🎯 Visão Geral
 
 O objetivo do projeto é processar e interpretar replays e dados de partidas profissionais, extraindo **informações estratégicas e estatísticas** que podem ser utilizadas para análises de desempenho, criação de conteúdo para redes sociais e futuras integrações em plataformas de análise.
 
+**Este repositório conta apresenta APENAS parte do projeto**
 ---
 
 ## 🧰 Tecnologias Utilizadas
@@ -119,4 +119,86 @@ REPLAY_PATH=caminho/completo
 ```bash
 mvn clean install
 mvn exec:java -Dexec.mainClass="com.wardvision.Main"
+```
+
+### 5. Estrutura de pastas
+```plaintext
+F:.
+|   estrutura.txt
+|   
++---main
+|   +---java
+|   |   \---com
+|   |       \---wardvision
+|   |           |   estrutura.txt
+|   |           |   Main.java
+|   |           |   Run.java
+|   |           |   
+|   |           +---config
+|   |           |       DatabaseConfig.java
+|   |           |       
+|   |           +---features       
+|   |           |   +---smoke_path
+|   |           |   |   +---controller
+|   |           |   |   |       SmokePathController.java
+|   |           |   |   |       
+|   |           |   |   +---models
+|   |           |   |   |       SmokeData.java
+|   |           |   |   |       SmokePathPoint.java
+|   |           |   |   |       
+|   |           |   |   +---processor
+|   |           |   |   |       SmokePathTracker.java
+|   |           |   |   |       
+|   |           |   |   \---repository
+|   |           |   |           CsvSmokePathRepository.java
+|   |           |   |           DbSmokePathRepository.java
+|   |           |   |           ICsvSmokePathRepository.java
+|   |           |   |           IDbSmokePathRepository.java                 
+|   |           +---helpers
+|   |           |       CsvFormatter.java
+|   |           |       EntityPropertyHelper.java
+|   |           |       NameNormalizer.java
+|   |           |       ReplayFileHelper.java
+|   |           |       
+|   |           \---shared
+|   |               +---analyzer
+|   |               |       BuybackLogProcessor.java
+|   |               |       ReplayAnalyzer.java
+|   |               |       SimpleRunnerFactory.java
+|   |               |       
+|   |               +---gametimes
+|   |               |   +---models
+|   |               |   |       GameTimes.java
+|   |               |   |       
+|   |               |   \---processor
+|   |               |           GameTimesProcessor.java
+|   |               |           IGameTimesProcessor.java
+|   |               |           
+|   |               +---intercace
+|   |               |       IEvent.java
+|   |               |       IProcessorWithResult.java
+|   |               |       IReplayAnalyzer.java
+|   |               |       ISimpleRunnerFactory.java
+|   |               |       
+|   |               +---match_details
+|   |               |   +---models
+|   |               |   |       MatchPlayers.java
+|   |               |   |       MatchTeams.java
+|   |               |   |       
+|   |               |   \---processor
+|   |               |           MatchDetailsProcessor.java
+|   |               |           
+|   |               \---models
+|   |                       MatchContext.java
+|   |                       
+|   \---resources
+|           simplelogger.properties
+|           
+\---test
+    \---java
+        \---com
+            \---wardvision
+                    LoggerLevelTest.java
+                    ReplayAnalyzerTest.java
+                    RunTest.java
 ```

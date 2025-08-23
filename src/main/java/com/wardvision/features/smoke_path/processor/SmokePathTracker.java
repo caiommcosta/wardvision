@@ -1,13 +1,13 @@
 package com.wardvision.features.smoke_path.processor;
 
-import com.wardvision.features.smoke_path.models.SmokeData;
-import com.wardvision.features.smoke_path.models.SmokePathPoint;
+import com.wardvision.features.smoke_path.entities.SmokeData;
+import com.wardvision.features.smoke_path.entities.SmokePathPoint;
 import com.wardvision.helpers.NameNormalizer;
-import com.wardvision.shared.gametimes.models.GameTimes;
+import com.wardvision.shared.entities.MatchContext;
+import com.wardvision.shared.gametimes.entities.GameTimes;
 import com.wardvision.shared.intercace.IProcessorWithResult;
-import com.wardvision.shared.match_details.models.MatchPlayers;
-import com.wardvision.shared.match_details.models.MatchTeams;
-import com.wardvision.shared.models.MatchContext;
+import com.wardvision.shared.match_details.entities.MatchPlayers;
+import com.wardvision.shared.match_details.entities.MatchTeams;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

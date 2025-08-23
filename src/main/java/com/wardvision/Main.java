@@ -9,7 +9,7 @@ public class Main {
         String pathToRead = args.length > 0 ? args[0] : System.getenv("REPLAY_PATH");
 
         if (pathToRead == null || pathToRead.isEmpty()) {
-            System.err.println("Caminho para os replays não definido.");
+            System.err.println("Não há replays no caminho.");
             System.exit(1);
         }
 

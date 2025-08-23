@@ -1,3 +1,4 @@
+.env
 data/error
 data/parsed
 data/processed

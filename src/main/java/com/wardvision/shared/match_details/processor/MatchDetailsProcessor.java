@@ -6,8 +6,8 @@ import java.util.Map;
 
 import com.wardvision.helpers.EntityPropertyHelper;
 import com.wardvision.helpers.NameNormalizer;
-import com.wardvision.shared.match_details.models.MatchPlayers;
-import com.wardvision.shared.match_details.models.MatchTeams;
+import com.wardvision.shared.match_details.entities.MatchPlayers;
+import com.wardvision.shared.match_details.entities.MatchTeams;
 
 import skadistats.clarity.model.Entity;
 import skadistats.clarity.processor.entities.Entities;

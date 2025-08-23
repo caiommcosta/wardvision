@@ -3,7 +3,7 @@ package com.wardvision.shared.analyzer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wardvision.shared.models.MatchContext;
+import com.wardvision.shared.entities.MatchContext;
 
 import skadistats.clarity.model.CombatLogEntry;
 import skadistats.clarity.processor.gameevents.OnCombatLogEntry;

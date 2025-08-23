@@ -3,7 +3,7 @@ package com.wardvision.features.smoke_path.repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wardvision.features.smoke_path.models.SmokePathPoint;
+import com.wardvision.features.smoke_path.entities.SmokePathPoint;
 import com.wardvision.helpers.CsvFormatter;
 
 import java.io.BufferedWriter;

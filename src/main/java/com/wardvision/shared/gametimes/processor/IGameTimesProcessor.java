@@ -1,6 +1,6 @@
 package com.wardvision.shared.gametimes.processor;
 
-import com.wardvision.shared.gametimes.models.GameTimes;
+import com.wardvision.shared.gametimes.entities.GameTimes;
 
 import skadistats.clarity.model.Entity;
 import skadistats.clarity.model.FieldPath;

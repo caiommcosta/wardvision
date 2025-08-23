@@ -1,4 +1,4 @@
-package com.wardvision.features.smoke_path.models;
+package com.wardvision.features.smoke_path.entities;
 
 public record SmokePathPoint(
     int smokeId,

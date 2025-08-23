@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.wardvision.features.smoke_path.controller.SmokePathController;
 import com.wardvision.features.watcher_activations.controller.WatcherActivationController;
 import com.wardvision.shared.analyzer.ReplayAnalyzer;
 
@@ -42,10 +43,10 @@ public class Run {
     }
 
     // Controllers
-    WatcherActivationController watcherActivationController = new WatcherActivationController();
+    SmokePathController smokePathController = new SmokePathController();
 
-    // Analyzer
-    ReplayAnalyzer analyzer = new ReplayAnalyzer(List.of(watcherActivationController));
+    // Replay Analyzer
+    ReplayAnalyzer replayAnalyzer = new ReplayAnalyzer(List.of(smokePathController));
 
     File[] files = folder.listFiles();
     if (files == null || files.length == 0) {
@@ -64,7 +65,7 @@ public class Run {
         i++;
 
         try {
-          analyzer.analyzer(file);
+          replayAnalyzer.analyzer(file);
 
         } catch (Exception e) {
           log.error("Arquivo de replay inválido: {} - {}", file.getName(), e);

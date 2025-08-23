@@ -1,10 +1,10 @@
-package com.wardvision.shared.models;
+package com.wardvision.shared.entities;
 
 import java.util.Map;
 
-import com.wardvision.shared.gametimes.models.GameTimes;
-import com.wardvision.shared.match_details.models.MatchPlayers;
-import com.wardvision.shared.match_details.models.MatchTeams;
+import com.wardvision.shared.gametimes.entities.GameTimes;
+import com.wardvision.shared.match_details.entities.MatchPlayers;
+import com.wardvision.shared.match_details.entities.MatchTeams;
 
 public record MatchContext(
                 String matchId,

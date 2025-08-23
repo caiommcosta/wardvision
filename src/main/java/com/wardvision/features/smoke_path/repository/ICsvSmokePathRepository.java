@@ -2,7 +2,7 @@ package com.wardvision.features.smoke_path.repository;
 
 import java.util.List;
 
-import com.wardvision.features.smoke_path.models.SmokePathPoint;
+import com.wardvision.features.smoke_path.entities.SmokePathPoint;
 
 public interface ICsvSmokePathRepository {
 

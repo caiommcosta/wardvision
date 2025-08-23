@@ -3,12 +3,12 @@ package com.wardvision.shared.analyzer;
 import java.io.File;
 import java.util.List;
 
+import com.wardvision.shared.entities.MatchContext;
 import com.wardvision.shared.gametimes.processor.GameTimesProcessor;
 import com.wardvision.shared.intercace.IEvent;
 import com.wardvision.shared.intercace.IReplayAnalyzer;
 import com.wardvision.shared.intercace.ISimpleRunnerFactory;
 import com.wardvision.shared.match_details.processor.MatchDetailsProcessor;
-import com.wardvision.shared.models.MatchContext;
 import com.wardvision.helpers.ReplayFileHelper;
 
 import skadistats.clarity.processor.runner.SimpleRunner;
@@ -58,7 +58,6 @@ public class ReplayAnalyzer implements IReplayAnalyzer {
       BuybackLogProcessor buybackLogProcessor = new BuybackLogProcessor(context);
 
       SimpleRunner runner = runnerFactory.create(replayFile);
-
       runner.runWith(gameTimeProcessor, teamPlayersProcessor,
           buybackLogProcessor);
 

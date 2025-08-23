@@ -3,7 +3,7 @@ package com.wardvision.features.smoke_path.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wardvision.features.smoke_path.models.SmokePathPoint;
+import com.wardvision.features.smoke_path.entities.SmokePathPoint;
 import com.wardvision.features.smoke_path.repository.CsvSmokePathRepository;
 import com.wardvision.features.smoke_path.repository.DbSmokePathRepository;
 import com.wardvision.shared.intercace.IEvent;
