@@ -13,13 +13,13 @@ O objetivo do projeto é processar e interpretar replays e dados de partidas pro
 ## 🧰 Tecnologias Utilizadas
 
 ### 🎞️ Parser de Replays (Java)
-- Java (JDK 17+)
+- Java (JDK 17)
 - Maven
-- Clarity (biblioteca para parsing de replays Dota 2)
+- [Clarity (parsing de replays OpenSource)](https://github.com/skadistats/clarity)
 - PostgreSQL (banco de dados)
 - dotenv-java (gerenciamento de variáveis de ambiente)
 - OpenCSV (manipulação de arquivos CSV)
-- SLF4J (logging)
+- SLF4J (log)
 - JUnit e Mockito (testes)
 
 ---
@@ -28,9 +28,9 @@ O objetivo do projeto é processar e interpretar replays e dados de partidas pro
 
 ### 1. Pré-requisitos
 
-#### ☕ Java (JDK 17+)
+#### ☕ Java (JDK 17)
 
-Instale o Java Development Kit (JDK) 17 ou superior:  
+Instale o Java Development Kit (JDK) 17:  
 👉 [Download do JDK (Oracle)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 
 Após a instalação, configure a variável de ambiente `JAVA_HOME` no seu sistema operacional.
@@ -55,8 +55,10 @@ DB_PORT=5432
 DB_NAME=wardvision
 DB_USER=seu_usuario
 DB_PASSWORD=sua_senha
-REPLAY_PATH=caminho/completo
+REPLAY_PATH=Seu-caminho/replay-parser/data/tests/raw
 ```
+
+edite o "Seu-caminho"
 
 ### 3. Dependências do Backend (arquivo pom.xml)
 
