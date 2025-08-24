@@ -1,25 +1,30 @@
 package com.wardvision;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import com.wardvision.features.smoke_path.controller.SmokePathController;
+import com.wardvision.helpers.ReplayFileHelper;
 import com.wardvision.shared.analyzer.ReplayAnalyzer;
 
 public class Run {
 
   private static final Logger log = LoggerFactory.getLogger(Run.class);
   private int i;
+  Dotenv dotenv = Dotenv.load();
 
   public Run() {
     this.i = 1;
   }
 
-  public void processFolder() {
-    String path = System.getenv("REPLAY_PATH");
+  public void processFolder() throws IOException {
+    String path = dotenv.get("REPLAY_PATH");
 
     if (path == null || path.isEmpty())
       path = "F:\\Workspace\\wardvision\\replay-parser\\data\\raw";
@@ -27,7 +32,7 @@ public class Run {
     processFolder(path);
   }
 
-  public void processFolder(String pathToRead) {
+  public void processFolder(String pathToRead) throws IOException {
     i = 1;
     File folder = new File(pathToRead);
 
@@ -56,7 +61,8 @@ public class Run {
     for (File file : files) {
       try {
         if (!file.isFile() || !file.getName().toLowerCase().endsWith(".dem")) {
-          log.debug("Ignorando arquivo não suportado: {}", file.getName());
+          ReplayFileHelper.moveToError(file);
+          log.debug("Movido para ../error: arquivo não suportado: {}", file.getName());
           continue;
         }
 
@@ -66,12 +72,17 @@ public class Run {
         try {
           replayAnalyzer.analyzer(file);
 
+          ReplayFileHelper.moveToProcessed(file);
+          log.info("Sucesso! Movido para ../processed: {}", file.getName());
+
         } catch (Exception e) {
-          log.error("Arquivo de replay inválido: {} - {}", file.getName(), e);
+          ReplayFileHelper.moveToError(file);
+          log.error("Movido para ../error: Arquivo de replay inválido: {} - {}", file.getName(), e);
         }
 
       } catch (Exception e) {
-        log.error("Erro ao processar arquivo {}", file.getName(), e);
+        ReplayFileHelper.moveToError(file);
+        log.error("Movido para ../error: Erro ao processar arquivo {}", file.getName(), e);
       }
     }
   }

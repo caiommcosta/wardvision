@@ -7,14 +7,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 public class ReplayFileHelper {
 
-  private static final String PROCESSED_DIR = "F:\\Workspace\\wardvision\\replay-parser\\data\\processed";
-  private static final String ERROR_DIR = "F:\\Workspace\\wardvision\\replay-parser\\data\\error";
+  private static Dotenv dotenv = Dotenv.load();
+  private static final String PROCESSED_DIR = dotenv.get("PROCESSED_DIR");
+  private static final String ERROR_DIR = dotenv.get("ERROR_DIR");
 
   public static void moveToProcessed(File file) throws IOException {
     Path processedDir = Paths.get(PROCESSED_DIR);
-    Files.createDirectories(processedDir); // Garante que a pasta exista
+    Files.createDirectories(processedDir); // Garante que a pasta existe
 
     Path sourcePath = file.toPath();
     Path targetPath = processedDir.resolve(file.getName());
@@ -25,7 +28,7 @@ public class ReplayFileHelper {
   public static void moveToError(File file) throws IOException {
 
     Path errorDir = Paths.get(ERROR_DIR);
-    Files.createDirectories(errorDir); // Garante que a pasta exista
+    Files.createDirectories(errorDir); // Garante que a pasta existe
 
     Path sourcePath = file.toPath();
     Path targetPath = errorDir.resolve(file.getName());
