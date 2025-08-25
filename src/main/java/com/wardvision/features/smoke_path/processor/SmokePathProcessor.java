@@ -26,7 +26,7 @@ import java.util.List;
 
 import java.util.ArrayList;
 
-public class SmokePathTracker implements IProcessorWithResult<SmokePathPoint> {
+public class SmokePathProcessor implements IProcessorWithResult<SmokePathPoint> {
 
   private final List<SmokePathPoint> smokePathPoints = new ArrayList<>();
   private final String matchId;
@@ -36,7 +36,7 @@ public class SmokePathTracker implements IProcessorWithResult<SmokePathPoint> {
   private Map<String, Integer> heroToPlayer = new HashMap<>();
   private final MatchTeams teamNames;
 
-  public SmokePathTracker(MatchContext context) {
+  public SmokePathProcessor(MatchContext context) {
     this.matchId = context.matchId();
     this.timestamp = context.timestamp();
     this.gameTimes = context.gameTimes();
@@ -51,7 +51,7 @@ public class SmokePathTracker implements IProcessorWithResult<SmokePathPoint> {
   }
 
   // Para log de eventos
-  private final Logger log = LoggerFactory.getLogger(SmokePathTracker.class);
+  private final Logger log = LoggerFactory.getLogger(SmokePathProcessor.class);
 
   private final Map<Integer, SmokeData> heroesInSmoke = new HashMap<>();
 

@@ -1,56 +1,96 @@
 package com.wardvision;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+
 import java.io.File;
 import java.io.IOException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.mockito.MockedConstruction;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+
+import com.wardvision.helpers.ReplayFileHelper;
+import com.wardvision.shared.analyzer.ReplayAnalyzer;
 
 public class RunTest {
 
   private Run run;
-  private final String testDirPath = "data\\tests\\raw";
 
   @BeforeEach
   public void setup() throws IOException {
     run = new Run();
-    File testDir = new File(testDirPath);
-    if (!testDir.exists()) {
-      testDir.mkdir();
+  }
+
+  @Test
+  public void testPathDoesNotExist() throws IOException {
+    try (MockedStatic<ReplayFileHelper> helper = Mockito.mockStatic(ReplayFileHelper.class)) {
+      run.processFolder("pasta_que_nao_existe");
+      helper.verifyNoInteractions();
     }
   }
 
   @Test
-  public void testPathDoesNotExist() {
-    run.processFolder("pasta_que_nao_existe");
-    // Verifica que não lança exceção, logs são gerenciados pela classe
-  }
-
-  @Test
-  public void testPathIsFile() throws IOException {
-    File fakeFile = new File("fakefile.txt");
+  public void testPathIsFile(@TempDir File tempDir) throws IOException {
+    File fakeFile = new File(tempDir, "fakefile.txt");
     fakeFile.createNewFile();
 
-    run.processFolder(fakeFile.getAbsolutePath());
-
-    fakeFile.delete();
+    try (MockedStatic<ReplayFileHelper> helper = Mockito.mockStatic(ReplayFileHelper.class)) {
+      run.processFolder(fakeFile.getAbsolutePath());
+      helper.verifyNoInteractions();
+    }
   }
 
   @Test
-  public void testFolderWithInvalidFile() throws IOException {
-    File invalidFile = new File(testDirPath + "/arquivo.txt");
+  public void testFolderWithInvalidFile(@TempDir File tempDir) throws IOException {
+    File invalidFile = new File(tempDir, "arquivo.txt");
     invalidFile.createNewFile();
 
-    run.processFolder(testDirPath);
-
-    invalidFile.delete();
+    try (MockedStatic<ReplayFileHelper> helper = Mockito.mockStatic(ReplayFileHelper.class)) {
+      run.processFolder(tempDir.getAbsolutePath());
+      helper.verify(() -> ReplayFileHelper.moveToError(invalidFile), times(1));
+    }
   }
 
   @Test
-  public void testFolderWithValidDemFile() throws IOException {
-    File demFile = new File(testDirPath + "/1753668915_8392306732.dem");
+  public void testFolderWithValidDemFile_Success(@TempDir File tempDir) throws IOException {
+    File demFile = new File(tempDir, "192163448_8426635790.dem");
     demFile.createNewFile();
 
-    run.processFolder(testDirPath);
+    try (MockedStatic<ReplayFileHelper> helper = Mockito.mockStatic(ReplayFileHelper.class);
+        MockedConstruction<ReplayAnalyzer> analyzerMock = Mockito.mockConstruction(ReplayAnalyzer.class,
+            (mock, context) -> {
+              doNothing().when(mock).analyzer(any(File.class));
+            })) {
+
+      run.processFolder(tempDir.getAbsolutePath());
+
+      helper.verify(() -> ReplayFileHelper.moveToProcessed(demFile), times(1));
+      helper.verify(() -> ReplayFileHelper.moveToError(any(File.class)), never());
+    }
+  }
+
+  @Test
+  public void testFolderWithValidDemFile_Error(@TempDir File tempDir) throws IOException {
+    File demFile = new File(tempDir, "192163448_8426635790.dem");
+    demFile.createNewFile();
+
+    try (MockedStatic<ReplayFileHelper> helper = Mockito.mockStatic(ReplayFileHelper.class);
+        MockedConstruction<ReplayAnalyzer> analyzerMock = Mockito.mockConstruction(ReplayAnalyzer.class,
+            (mock, context) -> {
+              doThrow(new RuntimeException("erro parsing")).when(mock).analyzer(any(File.class));
+            })) {
+
+      run.processFolder(tempDir.getAbsolutePath());
+
+      helper.verify(() -> ReplayFileHelper.moveToError(demFile), times(1));
+      helper.verify(() -> ReplayFileHelper.moveToProcessed(any(File.class)), never());
+    }
   }
 }

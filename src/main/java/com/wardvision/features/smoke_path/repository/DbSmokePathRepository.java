@@ -2,11 +2,14 @@ package com.wardvision.features.smoke_path.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.wardvision.config.DatabaseConfig;
 import com.wardvision.features.smoke_path.entities.SmokePathPoint;
+import com.wardvision.features.smokes_outcome.entities.SmokePathMinDTO;
 
 public class DbSmokePathRepository implements IDbSmokePathRepository {
 
@@ -19,6 +22,13 @@ public class DbSmokePathRepository implements IDbSmokePathRepository {
           )
           ON CONFLICT ON CONSTRAINT unique_smoke_path_entry DO NOTHING;
       """;
+
+  private static final String SELECT_OUTCOME_QUERY = """
+      SELECT smoke_id, match_id, steam_id, hero_name, team_name, side, tick, time
+      FROM smoke_path
+      WHERE match_id = ?
+      ORDER BY tick ASC
+        """;
 
   @Override
   public void save(List<SmokePathPoint> entries) throws SQLException {
@@ -43,5 +53,37 @@ public class DbSmokePathRepository implements IDbSmokePathRepository {
 
       statement.executeBatch();
     }
+  }
+
+  @Override
+  public List<SmokePathMinDTO> findByMatchId(String matchId) throws SQLException {
+    List<SmokePathMinDTO> results = new ArrayList<>();
+
+    try {
+      Connection conn = DatabaseConfig.getConnection();
+      PreparedStatement statement = conn.prepareStatement(SELECT_OUTCOME_QUERY);
+
+      statement.setString(1, matchId);
+
+      try (ResultSet rs = statement.executeQuery()) {
+        while (rs.next()) {
+          SmokePathMinDTO dto = new SmokePathMinDTO(
+              rs.getInt("smoke_id"),
+              rs.getString("match_id"),
+              rs.getString("steam_id"),
+              rs.getString("hero_name"),
+              rs.getString("team_name"),
+              rs.getInt("side"),
+              rs.getInt("tick"),
+              rs.getInt("time"));
+          results.add(dto);
+        }
+      }
+
+    } catch (SQLException e) {
+
+      e.printStackTrace();
+    }
+    return results;
   }
 }

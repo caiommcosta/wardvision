@@ -10,7 +10,7 @@ import com.wardvision.shared.intercace.IProcessorWithResult;
 import com.wardvision.shared.intercace.IReplayAnalyzer;
 import com.wardvision.shared.intercace.ISimpleRunnerFactory;
 import com.wardvision.shared.match_details.processor.MatchDetailsProcessor;
-import com.wardvision.features.smoke_path.processor.SmokePathTracker;
+import com.wardvision.features.smoke_path.processor.SmokePathProcessor;
 import com.wardvision.helpers.ReplayFileHelper;
 
 import skadistats.clarity.processor.runner.SimpleRunner;
@@ -18,9 +18,10 @@ import skadistats.clarity.processor.runner.SimpleRunner;
 /*
  * Para que cada replay seja analisado uma única vez, 
  * é necessário despachar eventos diferentes para cada recurso (feature) da aplicação.
- * Assim, cada '.dem' é processado uma única vez e evita duplicação de análises.
+ * Assim, cada '.dem' é processado uma única vez e evita loops com o mesmo replay.
  * Tudo está centralizado no ReplayAnalyzer, que é responsável por iniciar
- * o processamento e despachar os eventos para as features
+ * o processamento e despachar os eventos.
+ * Cada Controller verifica o evento de sua feature e instancia apenas o correto.
 */
 
 public class ReplayAnalyzer implements IReplayAnalyzer {
@@ -59,7 +60,7 @@ public class ReplayAnalyzer implements IReplayAnalyzer {
 
       // Feature processors
       List<IProcessorWithResult<?>> processors = List.of(
-          new SmokePathTracker(context)
+          new SmokePathProcessor(context)
       // adicionar outros processors
       );
 

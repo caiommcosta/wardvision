@@ -1,13 +1,12 @@
 # 🧠 WardVision
+**Este repositório conta apresenta APENAS parte de um projeto**
 
-**WardVision** é um projeto pessoal focado na **análise de partidas profissionais de Dota 2** e na **extração de estatísticas relevantes** a partir de arquivos de replay `.dem` e de **APIs públicas**, como a OpenDota.
+Este é um projeto pessoal focado na **análise de partidas profissionais de Dota 2** e na **extração de estatísticas relevantes** a partir de arquivos de replay `.dem` e de **APIs públicas**, como a OpenDota.
 ---
 
 ## 🎯 Visão Geral
 
 O objetivo do projeto é processar e interpretar replays e dados de partidas profissionais, extraindo **informações estratégicas e estatísticas** que podem ser utilizadas para análises de desempenho, criação de conteúdo para redes sociais e futuras integrações em plataformas de análise.
-
-**Este repositório conta apresenta APENAS parte do projeto**
 ---
 
 ## 🧰 Tecnologias Utilizadas
@@ -21,7 +20,6 @@ O objetivo do projeto é processar e interpretar replays e dados de partidas pro
 - OpenCSV (manipulação de arquivos CSV)
 - SLF4J (log)
 - JUnit e Mockito (testes)
-
 ---
 
 ## 🚀 Como Rodar o Projeto
@@ -42,7 +40,6 @@ Instale o [Maven](https://maven.apache.org/install.html) para gerenciamento das 
 #### 🐘 PostgreSQL
 
 Instale o PostgreSQL para armazenar os dados extraídos dos replays.
-
 ---
 
 ### 2. Configuração
@@ -56,6 +53,8 @@ DB_NAME=wardvision
 DB_USER=seu_usuario
 DB_PASSWORD=sua_senha
 REPLAY_PATH=Seu-caminho/replay-parser/data/tests/raw
+PROCESSED_DIR=Seu-caminho/replay-parser/data/tests/processed
+ERROR_DIR=Seu-caminho/replay-parser/data/tests/error
 ```
 
 edite o "Seu-caminho"
@@ -144,18 +143,19 @@ F:.
 |   |           |   |   +---controller
 |   |           |   |   |       SmokePathController.java
 |   |           |   |   |       
-|   |           |   |   +---models
+|   |           |   |   +---entities
 |   |           |   |   |       SmokeData.java
 |   |           |   |   |       SmokePathPoint.java
 |   |           |   |   |       
 |   |           |   |   +---processor
-|   |           |   |   |       SmokePathTracker.java
+|   |           |   |   |       SmokePathProcessor.java
 |   |           |   |   |       
 |   |           |   |   \---repository
 |   |           |   |           CsvSmokePathRepository.java
 |   |           |   |           DbSmokePathRepository.java
 |   |           |   |           ICsvSmokePathRepository.java
-|   |           |   |           IDbSmokePathRepository.java                 
+|   |           |   |           IDbSmokePathRepository.java
+|   |           |   |                 
 |   |           +---helpers
 |   |           |       CsvFormatter.java
 |   |           |       EntityPropertyHelper.java
@@ -169,7 +169,7 @@ F:.
 |   |               |       SimpleRunnerFactory.java
 |   |               |       
 |   |               +---gametimes
-|   |               |   +---models
+|   |               |   +---entities
 |   |               |   |       GameTimes.java
 |   |               |   |       
 |   |               |   \---processor
@@ -183,14 +183,14 @@ F:.
 |   |               |       ISimpleRunnerFactory.java
 |   |               |       
 |   |               +---match_details
-|   |               |   +---models
+|   |               |   +---entities
 |   |               |   |       MatchPlayers.java
 |   |               |   |       MatchTeams.java
 |   |               |   |       
 |   |               |   \---processor
 |   |               |           MatchDetailsProcessor.java
 |   |               |           
-|   |               \---models
+|   |               \---entities
 |   |                       MatchContext.java
 |   |                       
 |   \---resources

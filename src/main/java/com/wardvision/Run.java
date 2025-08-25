@@ -71,8 +71,10 @@ public class Run {
 
         try {
           replayAnalyzer.analyzer(file);
+          // o ideal aqui é que a cada file executado > chamar e o smokesoutcome
 
           ReplayFileHelper.moveToProcessed(file);
+
           log.info("Sucesso! Movido para ../processed: {}", file.getName());
 
         } catch (Exception e) {

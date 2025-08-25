@@ -11,9 +11,15 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class ReplayFileHelper {
 
-  private static Dotenv dotenv = Dotenv.load();
-  private static final String PROCESSED_DIR = dotenv.get("PROCESSED_DIR");
-  private static final String ERROR_DIR = dotenv.get("ERROR_DIR");
+  private static Dotenv dotenv;
+  private static String PROCESSED_DIR;
+  private static String ERROR_DIR;
+
+  static {
+    dotenv = Dotenv.load();
+    PROCESSED_DIR = dotenv.get("PROCESSED_DIR");
+    ERROR_DIR = dotenv.get("ERROR_DIR");
+  }
 
   public static void moveToProcessed(File file) throws IOException {
     Path processedDir = Paths.get(PROCESSED_DIR);
@@ -47,10 +53,25 @@ public class ReplayFileHelper {
 
   public static String extractTimestamp(String filename) {
     String[] parts = filename.replace(".dem", "").split("_");
-    if (parts.length > 0) {
-      return parts[0];
-    } else {
-      throw new IllegalArgumentException("Nome do arquivo inválido para extrair timestamp: " + filename);
+    if (parts.length == 0) {
+      throw new IllegalArgumentException("Nome de arquivo inválido para extrair timestamp: " + filename);
     }
+
+    long timestamp;
+    try {
+      timestamp = Long.parseLong(parts[0]);
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException("Timestamp não é um número válido: " + parts[0]);
+    }
+
+    // Intervalo Unix plausível: 1970-01-01 até 2100-01-01
+    long earliest = 0L;
+    long latest = 4102444800L;
+    if (timestamp < earliest || timestamp > latest) {
+      throw new IllegalArgumentException("Timestamp fora do intervalo esperado: " + timestamp);
+    }
+
+    return parts[0];
   }
+
 }

@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.wardvision.helpers.EntityPropertyHelper;
 import com.wardvision.helpers.NameNormalizer;
 import com.wardvision.shared.match_details.entities.MatchPlayers;
@@ -19,8 +16,6 @@ import skadistats.clarity.processor.reader.OnTickEnd;
 import skadistats.clarity.processor.runner.Context;
 
 public class MatchDetailsProcessor {
-
-  private static final Logger log = LoggerFactory.getLogger(MatchDetailsProcessor.class);
 
   private final Map<Integer, MatchPlayers> matchPlayers = new HashMap<>();
 
